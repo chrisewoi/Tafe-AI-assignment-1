@@ -10,6 +10,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _verticalClamp = 30f;
     private float _verRot;
     [SerializeField] private bool _inverted;
+    [SerializeField] private GameObject Canvas;
+    public float interactDistance = 2f;
 
     private void Start()
     {
@@ -39,5 +41,39 @@ public class CameraController : MonoBehaviour
             float _horRot = camDir.x * _sensitivity * Time.deltaTime * (_inverted ? -1 : 1);
             transform.Rotate(0, _horRot, 0);
         }
+
+
+
+
+
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        RaycastHit hit;
+
+
+        Canvas.SetActive(false);
+
+
+        if (Physics.Raycast(ray, out hit, interactDistance))
+        {
+            if (ObjectContainsSwitch(hit.collider.gameObject))
+            {
+                Canvas.SetActive(true);
+            }
+        }
+    }
+
+    bool ObjectContainsSwitch(GameObject obj)
+    {
+        // Check if the object or any of its parents' names contain "Switch"
+        while (obj != null)
+        {
+            if (obj.name.Contains("Switch"))
+            {
+                return true;
+            }
+            obj = obj.transform.parent.gameObject;
+        }
+
+        return false;
     }
 }
