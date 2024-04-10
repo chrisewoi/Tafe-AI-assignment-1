@@ -20,9 +20,16 @@ public class LeverController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Canvas.SetActive(false);
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
+        {
+            if (!hit.collider.transform.IsChildOf(transform))
+            {
+                Canvas.SetActive(false);
+            }
+        }
 
         if (Physics.Raycast(ray, out hit, interactDistance))
         {
@@ -38,7 +45,8 @@ public class LeverController : MonoBehaviour
 
 
 
-            Quaternion newRotation;
+
+        Quaternion newRotation;
         if (switchOn)
         {
             newRotation = Quaternion.Euler(-60, 0, 0);
