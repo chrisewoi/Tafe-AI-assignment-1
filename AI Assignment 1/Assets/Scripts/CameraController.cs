@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using UnityEngine.UIElements;
 
 public class CameraController : MonoBehaviour
 {
@@ -55,7 +56,7 @@ public class CameraController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactDistance))
         {
-            if (ObjectContainsSwitch(hit.collider.gameObject))
+            if (hit.collider != null && hit.collider.transform.root.name.Contains("Switch"))
             {
                 Canvas.SetActive(true);
             }
@@ -65,7 +66,7 @@ public class CameraController : MonoBehaviour
     bool ObjectContainsSwitch(GameObject obj)
     {
         // Check if the object or any of its parents' names contain "Switch"
-        while (obj != null)
+        while (obj != null && obj.transform.parent != null)
         {
             if (obj.name.Contains("Switch"))
             {
